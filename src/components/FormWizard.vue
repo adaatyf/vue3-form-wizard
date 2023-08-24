@@ -1,11 +1,6 @@
 <template>
-  <div
-    :id="id ? id : ''"
-    class="vue-form-wizard"
-    :class="[stepSize, { vertical: isVertical }]"
-    @keyup.right="focusNextTab"
-    @keyup.left="focusPrevTab"
-  >
+  <div :id="id ? id : ''" class="vue-form-wizard" :class="[stepSize, { vertical: isVertical }]"
+    @keyup.right="focusNextTab" @keyup.left="focusPrevTab">
     <div class="wizard-header" v-if="$slots['title']">
       <slot name="title">
         <h4 class="wizard-title">{{ title }}</h4>
@@ -16,35 +11,15 @@
       <div class="wizard-progress-with-circle" v-if="!isVertical">
         <div class="wizard-progress-bar" :style="progressBarStyle"></div>
       </div>
-      <ul
-        class="wizard-nav wizard-nav-pills"
-        role="tablist"
-        :class="stepsClasses"
-      >
-        <slot
-          name="step"
-          v-for="(tab, index) in tabs"
-          :tab="tab"
-          :index="index"
-          :navigate-to-tab="navigateToTab"
-          :step-size="stepSize"
-          :transition="transition"
-        >
-          <wizard-step
-            :tab="tab"
-            :step-size="stepSize"
-            @click="
-              disableBackOnClickStep || disableBack
-                ? false
-                : navigateToTab(index)
-            "
-            @keyup.enter="navigateToTab(index)"
-            :transition="transition"
-            :index="index"
-            :disable-back-on-click-step="
-              disableBack ? true : disableBackOnClickStep
-            "
-          >
+      <ul class="wizard-nav wizard-nav-pills" role="tablist" :class="stepsClasses">
+        <slot name="step" v-for="(tab, index) in tabs" :tab="tab" :index="index" :navigate-to-tab="navigateToTab"
+          :step-size="stepSize" :transition="transition">
+          <wizard-step :tab="tab" :step-size="stepSize" @click="
+            disableBackOnClickStep || disableBack
+              ? false
+              : navigateToTab(index)
+            " @keyup.enter="navigateToTab(index)" :transition="transition" :index="index" :disable-back-on-click-step="disableBack ? true : disableBackOnClickStep
+    ">
           </wizard-step>
         </slot>
       </ul>
@@ -56,13 +31,7 @@
     <div class="wizard-card-footer clearfix" v-if="!hideButtons">
       <slot name="footer" v-bind="slotProps">
         <div class="wizard-footer-left" v-if="!disableBack">
-          <span
-            @click="prevTab"
-            @keyup.enter="prevTab"
-            v-if="displayPrevButton"
-            role="button"
-            tabindex="0"
-          >
+          <span @click="prevTab" @keyup.enter="prevTab" v-if="displayPrevButton" role="button" tabindex="0">
             <slot name="prev" v-bind="slotProps">
               <wizard-button :style="fillButtonStyle" :disabled="loading">
                 {{ backButtonText }}
@@ -74,26 +43,14 @@
 
         <div class="wizard-footer-right">
           <slot name="custom-buttons-right" v-bind="slotProps"></slot>
-          <span
-            @click="nextTab"
-            @keyup.enter="nextTab"
-            v-if="isLastStep"
-            role="button"
-            tabindex="0"
-          >
+          <span @click="nextTab" @keyup.enter="nextTab" v-if="isLastStep" role="button" tabindex="0">
             <slot name="finish" v-bind="slotProps">
               <wizard-button :style="fillButtonStyle">
                 {{ finishButtonText }}
               </wizard-button>
             </slot>
           </span>
-          <span
-            @click="nextTab"
-            @keyup.enter="nextTab"
-            role="button"
-            tabindex="0"
-            v-else
-          >
+          <span @click="nextTab" @keyup.enter="nextTab" role="button" tabindex="0" v-else>
             <slot name="next" v-bind="slotProps">
               <wizard-button :style="fillButtonStyle" :disabled="loading">
                 {{ nextButtonText }}
@@ -349,7 +306,11 @@ export default {
     nextTab() {
       let cb = () => {
         if (this.activeTabIndex < this.tabCount - 1) {
-          this.changeTab(this.activeTabIndex, this.activeTabIndex + 1);
+          let destTabIndex = this.activeTabIndex + 1
+          while (!this.tabs[destTabIndex].enable) {
+            destTabIndex++
+          }
+          this.changeTab(this.activeTabIndex, destTabIndex);
           this.afterTabChange(this.activeTabIndex);
         } else {
           this.$emit("on-complete");
@@ -361,7 +322,11 @@ export default {
       let cb = () => {
         if (this.activeTabIndex > 0) {
           this.setValidationError(null);
-          this.changeTab(this.activeTabIndex, this.activeTabIndex - 1);
+          let destTabIndex = this.activeTabIndex - 1;
+          while (!this.tabs[destTabIndex].enable) {
+            destTabIndex--
+          }
+          this.changeTab(this.activeTabIndex, destTabIndex);
         }
       };
       if (this.validateOnBack) {
@@ -511,6 +476,18 @@ export default {
         window.console.warn(
           `Prop startIndex set to ${this.startIndex} is greater than the number of tabs - ${this.tabs.length}. Make sure that the starting index is less than the number of tabs registered`
         );
+      }
+      this.enableTabs();
+    },
+    enableTabs() {
+      this.tabs.forEach((tab) => {
+        tab.enable = true;
+      });
+    },
+    disableTab(index) {
+      const tab = this.tabs[index];
+      if (tab) {
+        tab.enable = false;
       }
     },
   },
