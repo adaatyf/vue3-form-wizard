@@ -323,8 +323,9 @@ export default {
         if (this.activeTabIndex > 0) {
           this.setValidationError(null);
           let destTabIndex = this.activeTabIndex - 1;
+          this.tabs[this.activeTabIndex].checked = false;
           while (!this.tabs[destTabIndex].enable) {
-            destTabIndex--
+            destTabIndex--;
           }
           this.changeTab(this.activeTabIndex, destTabIndex);
         }
@@ -480,7 +481,7 @@ export default {
       this.enableTabs();
     },
     enableTabs() {
-      this.tabs.forEach((tab) => {
+      this.tabs.forEach(tab => {
         tab.enable = true;
       });
     },
