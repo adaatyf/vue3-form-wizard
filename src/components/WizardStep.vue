@@ -25,8 +25,7 @@
         </div>
         <slot v-else>
           <span class="wizard-icon" v-if="tab.customIcon" v-html="tab.customIcon"></span>
-          <i v-else :class="tab.checked ? 'fa fa-check' : ''" class="wizard-icon"
-            :style="tab.checked ? iconActiveStyle : ''">
+          <i v-else :class="tab.checked ? checkIcon : ''" class="wizard-icon" :style="tab.checked ? iconActiveStyle : ''">
             {{ tab.checked ? null : index + 1 }}
           </i>
         </slot>
@@ -65,6 +64,10 @@ export default {
     },
     isLastTab: {
       type: Boolean,
+      required: true
+    },
+    checkIcon: {
+      type: String,
       required: true
     }
   },
@@ -110,13 +113,16 @@ export default {
       return this.tab.shape === "tab";
     },
     cursorStyle() {
-      return this.disableBackOnClickStep ? "cursor: default" : "";
+      return {
+        ...(this.disableBackOnClickStep && { cursor: "default" }),
+        ...(this.tab.validationError && { 'border-bottom-color': this.tab.errorColor })
+      }
     },
     horizontalBarStyle() {
       return {
         backgroundColor: this.tab.color
       }
-    }
+    },
   },
 };
 </script>

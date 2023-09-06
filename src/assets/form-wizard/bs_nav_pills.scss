@@ -10,10 +10,11 @@
 .wizard-nav-wrap {
   display: flex;
   justify-content: center;  
-  box-shadow: 0px 20px 20px -20px rgba(122, 184, 203, 0.3);
+  box-shadow:rgba(122, 184, 203, 0.3) 0px 1px 20px 0px;
   > .scroll-btn{
     border: none;
     background: transparent;
+    padding-right: 10px;
   }
 }
 
@@ -25,14 +26,14 @@
   gap: 25px;
   overflow-x: auto;
   scrollbar-width: thin;
-  padding-right: 5px;
+  display: flex;
   //@include clearfix;
   
   > li {
     position: relative;
     display: flex;
     flex-grow: 0;
-
+    padding: 0 10px;
     > a {
       position: relative;
       display: block;

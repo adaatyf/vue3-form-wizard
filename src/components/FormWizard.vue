@@ -20,11 +20,13 @@
                 ? false
                 : navigateToTab(index)
               " @keyup.enter="navigateToTab(index)" :transition="transition" :index="index"
-              :disable-back-on-click-step="disableBack ? true : disableBackOnClickStep" :isLastTab="isLastTab(index)">
+              :disable-back-on-click-step="disableBack ? true : disableBackOnClickStep" :isLastTab="isLastTab(index)"
+              :checkIcon="checkIcon">
             </wizard-step>
           </slot>
         </ul>
-        <button type="button" @click="scrollBtnClick" class="fa fa-chevron-right scroll-btn"></button>
+        <button type="button" @click="scrollBtnClick" class="scroll-btn"
+          :class="scrollRightBtnIcon ? scrollRightBtnIcon : ''"></button>
       </div>
       <div class="wizard-tab-content">
         <slot v-bind="slotProps"> </slot>
@@ -169,6 +171,14 @@ export default {
       type: Boolean,
       default: false,
     },
+    scrollRightBtnIcon: {
+      type: String,
+      default: 'fa fa-chevron-right'
+    },
+    checkIcon: {
+      type: String,
+      default: 'fa fa-check'
+    }
   },
   provide() {
     return {
