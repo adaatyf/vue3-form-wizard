@@ -9,19 +9,20 @@
       background: $danger-states-color !important;
     }
   }
+  @include wizard-size('xxs', 24px, $font-size);
   @include wizard-size('xs', 40px, 16px);
   @include wizard-size('sm', 50px, 20px);
   @include wizard-size('md', 70px, 24px);
   @include wizard-size('lg', 90px, 28px);
 
-  .wizard-icon-circle {
+  div.wizard-icon-circle {
     font-size: 18px;
     border: 3px solid $gray-input-bg;
     border-radius: 50%;
     font-weight: $font-weight-bold;
     width: 70px;
     height: 70px;
-    background-color: $white-color;
+    background-color: $gray-input-bg;
     position: relative;
     display: flex;
     justify-content: center;
@@ -55,6 +56,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      font-style: normal;
     }
   }
 

@@ -1,4 +1,4 @@
-$gray-input-bg:              #F3F2EE !default;
+$gray-input-bg:              rgb(250, 250, 250) !default;
 $danger-color:               #EB5E28 !default;
 $white-color:                #FFFFFF !default;
 
@@ -19,3 +19,4 @@ $danger-states-color:        darken($danger-color,11%) !default;
 $font-weight-light:          300 !default;
 $font-weight-normal:         400 !default;
 $font-weight-bold:           600 !default;
+$font-size:                   14px;

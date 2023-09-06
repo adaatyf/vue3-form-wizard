@@ -11,18 +11,21 @@
       <div class="wizard-progress-with-circle" v-if="!isVertical">
         <div class="wizard-progress-bar" :style="progressBarStyle"></div>
       </div>
-      <ul class="wizard-nav wizard-nav-pills" role="tablist" :class="stepsClasses">
-        <slot name="step" v-for="(tab, index) in tabs" :tab="tab" :index="index" :navigate-to-tab="navigateToTab"
-          :step-size="stepSize" :transition="transition">
-          <wizard-step :tab="tab" :step-size="stepSize" @click="
-            disableBackOnClickStep || disableBack
-              ? false
-              : navigateToTab(index)
-            " @keyup.enter="navigateToTab(index)" :transition="transition" :index="index" :disable-back-on-click-step="disableBack ? true : disableBackOnClickStep
-    ">
-          </wizard-step>
-        </slot>
-      </ul>
+      <div class="wizard-nav-wrap">
+        <ul class="wizard-nav wizard-nav-pills" role="tablist" :class="stepsClasses" ref="wizardNav">
+          <slot name="step" v-for="(tab, index) in tabs" :tab="tab" :index="index" :navigate-to-tab="navigateToTab"
+            :step-size="stepSize" :transition="transition">
+            <wizard-step :tab="tab" :step-size="stepSize" @click="
+              disableBackOnClickStep || disableBack
+                ? false
+                : navigateToTab(index)
+              " @keyup.enter="navigateToTab(index)" :transition="transition" :index="index"
+              :disable-back-on-click-step="disableBack ? true : disableBackOnClickStep" :isLastTab="isLastTab(index)">
+            </wizard-step>
+          </slot>
+        </ul>
+        <button type="button" @click="scrollBtnClick" class="fa fa-chevron-right scroll-btn"></button>
+      </div>
       <div class="wizard-tab-content">
         <slot v-bind="slotProps"> </slot>
       </div>
@@ -130,7 +133,7 @@ export default {
       type: String,
       default: "md",
       validator: (value) => {
-        let acceptedValues = ["xs", "sm", "md", "lg"];
+        let acceptedValues = ["xxs", "xs", "sm", "md", "lg"];
         return acceptedValues.indexOf(value) !== -1;
       },
     },
@@ -209,6 +212,7 @@ export default {
     },
     progressBarStyle() {
       return {
+        display: 'none',
         backgroundColor: this.color,
         width: `${this.progress}%`,
         color: this.color,
@@ -311,6 +315,7 @@ export default {
             destTabIndex++
           }
           this.changeTab(this.activeTabIndex, destTabIndex);
+          this.$refs.wizardNav.querySelector(`li:nth-child(${destTabIndex + 1})`).scrollIntoView({ behavior: "smooth" })
           this.afterTabChange(this.activeTabIndex);
         } else {
           this.$emit("on-complete");
@@ -327,6 +332,7 @@ export default {
           while (!this.tabs[destTabIndex].enable) {
             destTabIndex--;
           }
+          this.$refs.wizardNav.querySelector(`li:nth-child(${destTabIndex + 1})`).scrollIntoView({ behavior: "smooth" })
           this.changeTab(this.activeTabIndex, destTabIndex);
         }
       };
@@ -481,7 +487,7 @@ export default {
       this.enableTabs();
     },
     enableTabs() {
-      this.tabs.forEach(tab => {
+      this.tabs.forEach((tab, index) => {
         tab.enable = true;
       });
     },
@@ -490,6 +496,18 @@ export default {
       if (tab) {
         tab.enable = false;
       }
+    },
+    scrollBtnClick() {
+      const scrollWidth = this.$refs.wizardNav.offsetWidth + this.$refs.wizardNav.scrollLeft
+      this.$refs.wizardNav.scrollTo({
+        left: scrollWidth,
+        behavior: 'smooth'
+      })
+    },
+    isLastTab(index) {
+      if (this.tabs.length === index + 1)
+        return true;
+      return false;
     },
   },
   mounted() {

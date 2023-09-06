@@ -6,15 +6,32 @@
 .vue-form-wizard a{
   text-decoration: none;
 }
-.vue-form-wizard .wizard-nav {
+
+.wizard-nav-wrap {
+  display: flex;
+  justify-content: center;  
+  box-shadow: 0px 20px 20px -20px rgba(122, 184, 203, 0.3);
+  > .scroll-btn{
+    border: none;
+    background: transparent;
+  }
+}
+
+.vue-form-wizard ul.wizard-nav {
   margin-bottom: 0;
   padding-left: 0; // Override default ul/ol
   list-style: none;
+  flex-wrap: nowrap;
+  gap: 25px;
+  overflow-x: auto;
+  scrollbar-width: thin;
+  padding-right: 5px;
   //@include clearfix;
-
+  
   > li {
     position: relative;
-    display: block;
+    display: flex;
+    flex-grow: 0;
 
     > a {
       position: relative;
@@ -38,6 +55,18 @@
         background-color: transparent;
         cursor: $cursor-disabled;
       }
+    }
+  }
+}
+
+@media (pointer: fine) {
+  .vue-form-wizard ul.wizard-nav{
+    &::-webkit-scrollbar{
+      width: 5px;
+      height: 8px;
+    }
+    &::-webkit-scrollbar-thumb {
+      background: rgb(205, 205, 205);
     }
   }
 }
