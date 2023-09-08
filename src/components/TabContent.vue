@@ -60,6 +60,9 @@ export default {
       type: Number,
       default: 0,
     },
+    prevTabClick: {
+      type: Function
+    }
   },
   inject: ['addTab', 'removeTab'],
   data() {

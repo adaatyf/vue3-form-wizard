@@ -343,6 +343,9 @@ export default {
             destTabIndex--;
           }
           this.$refs.wizardNav.querySelector(`li:nth-child(${destTabIndex + 1})`).scrollIntoView({ behavior: "smooth" })
+          if (this.tabs[this.activeTabIndex].prevTabClick !== undefined) {
+            this.tabs[this.activeTabIndex].prevTabClick();
+          }
           this.changeTab(this.activeTabIndex, destTabIndex);
         }
       };
