@@ -65,6 +65,8 @@
         </div>
       </slot>
     </div>
+    <slot name="extraButton" v-bind="slotProps" v-if="!hideExtraButtons">
+    </slot>
   </div>
 </template>
 <script>
@@ -106,6 +108,10 @@ export default {
     hideButtons: {
       type: Boolean,
       default: false,
+    },
+    hideExtraButtons: {
+      type: Boolean,
+      default: true,
     },
     validateOnBack: Boolean,
     /***
