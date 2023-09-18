@@ -331,6 +331,7 @@ export default {
             destTabIndex++
           }
           this.changeTab(this.activeTabIndex, destTabIndex);
+          window.scrollTo(0, 0)
           this.$refs.wizardNav.querySelector(`li:nth-child(${destTabIndex + 1})`).scrollIntoView({ behavior: "smooth" })
           this.afterTabChange(this.activeTabIndex);
         } else {
@@ -348,6 +349,7 @@ export default {
           while (!this.tabs[destTabIndex].enable) {
             destTabIndex--;
           }
+          window.scrollTo(0, 0)
           this.$refs.wizardNav.querySelector(`li:nth-child(${destTabIndex + 1})`).scrollIntoView({ behavior: "smooth" })
           if (this.tabs[this.activeTabIndex].prevTabClick !== undefined) {
             this.tabs[this.activeTabIndex].prevTabClick();
