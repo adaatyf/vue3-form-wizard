@@ -19,14 +19,14 @@
               disableBackOnClickStep || disableBack
                 ? false
                 : navigateToTab(index)
-              " @keyup.enter="navigateToTab(index)" :transition="transition" :index="index"
+            " @keyup.enter="navigateToTab(index)" :transition="transition" :index="index"
               :disable-back-on-click-step="disableBack ? true : disableBackOnClickStep" :isLastTab="isLastTab(index)"
               :checkIcon="checkIcon">
             </wizard-step>
           </slot>
         </ul>
         <button type="button" @click="scrollBtnClick" class="scroll-btn"
-          :class="scrollRightBtnIcon ? scrollRightBtnIcon : ''"></button>
+          :class="scrollRightBtnIcon ? scrollRightBtnIcon : ''" v-if="showScrollBtn"></button>
       </div>
       <div class="wizard-tab-content">
         <slot v-bind="slotProps"> </slot>
@@ -199,6 +199,7 @@ export default {
       maxStep: 0,
       loading: false,
       tabs: [],
+      showScrollBtn: false
     };
   },
   computed: {
@@ -533,6 +534,11 @@ export default {
   },
   mounted() {
     this.initializeTabs();
+    this.$nextTick(() => {
+      if (this.$refs.wizardNav.scrollWidth > this.$refs.wizardNav.clientWidth) {
+        this.showScrollBtn = true
+      }
+    })
   },
   watch: {
     "$route.path"(newRoute) {
