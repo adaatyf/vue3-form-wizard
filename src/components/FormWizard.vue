@@ -534,16 +534,20 @@ export default {
   },
   mounted() {
     this.initializeTabs();
-    this.$nextTick(() => {
-      if (this.$refs.wizardNav.scrollWidth > this.$refs.wizardNav.clientWidth) {
-        this.showScrollBtn = true
-      }
-    })
   },
   watch: {
     "$route.path"(newRoute) {
       this.checkRouteChange(newRoute);
     },
+    "tabs.length"() {
+      this.$nextTick(() => {
+        if (this.$refs.wizardNav.scrollWidth > this.$refs.wizardNav.clientWidth) {
+          this.showScrollBtn = true
+        } else {
+          this.showScrollBtn = false
+        }
+      })
+    }
   },
 };
 </script>
